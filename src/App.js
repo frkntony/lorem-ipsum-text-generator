@@ -9,7 +9,7 @@ class App extends Component {
     this.state = {
       apiURL: 'https://baconipsum.com/api/',
       type: 'meat-and-filler',
-      paras: 5,
+      sentences: 5,
       lorem: 1,
       text: ''
     }
@@ -23,8 +23,7 @@ class App extends Component {
   //?type=all-meat&paras=3&start-with-lorem=1&format=html
   getSampleText = () => {
 
-    axios.get(`${this.state.apiURL}?type=${this.state.type}?paras=${this.state.paras}
-                ?start-with-lorem=${this.state.lorem}`)
+    axios.get(`${this.state.apiURL}?type=${this.state.type}?sentences=${this.state.sentences}`)
       .then(res => {
         this.setState({ text: res.data })
         console.log(res.data)
@@ -39,18 +38,18 @@ class App extends Component {
           <form>
 
             <div className='form-group'>
-              <label htmlFor='paras'>How many paragraphs do you need?</label>
-              <select className='form-control' id='paras'>
-                <option value='1'>1</option>
-                <option value='2'>2</option>
-                <option value='3'>3</option>
-                <option value='4'>4</option>
+              <label htmlFor='numSentences'>How many sentences do you need?</label>
+              <select className='form-control' id='numSentences'>
                 <option value='5'>5</option>
-                <option value='6'>6</option>
-                <option value='7'>7</option>
-                <option value='8'>8</option>
-                <option value='9'>9</option>
                 <option value='10'>10</option>
+                <option value='15'>15</option>
+                <option value='20'>20</option>
+                <option value='25'>25</option>
+                <option value='30'>30</option>
+                <option value='35'>35</option>
+                <option value='40'>40</option>
+                <option value='45'>45</option>
+                <option value='50'>50</option>
               </select>
             </div>
 
