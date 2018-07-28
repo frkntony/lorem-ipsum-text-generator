@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import axios from 'axios'
+import './App.css'
 
 
 class App extends Component {
@@ -9,37 +10,40 @@ class App extends Component {
     this.state = {
       apiURL: 'https://baconipsum.com/api/',
       type: 'meat-and-filler',
-      sentences: 5,
-      lorem: 1,
+      value: 5,
       text: ''
     }
   }
 
-  componentWillMount() {
-    this.getSampleText()
-  }
+  // returns random lorem impsum
+  getLoremImpsum = (e) => {
+    const val = e.target.value
 
-  // full api sample call
-  //?type=all-meat&paras=3&start-with-lorem=1&format=html
-  getSampleText = () => {
+    // full api sample call
+    // ?type=all-meat&paras=3&start-with-lorem=1&format=html
+    axios.get(`${this.state.apiURL}?type=${this.state.type}?sentences=${val}`)
+    .then(res => {
+      this.setState({ text: res.data })
+    })
+    .catch(e => console.log(e))
+  } // ./getLoremImpsum
 
-    axios.get(`${this.state.apiURL}?type=${this.state.type}?sentences=${this.state.sentences}`)
-      .then(res => {
-        this.setState({ text: res.data })
-        console.log(res.data)
-      })
-      .catch(e => console.log(e))
-  }
+  changeNumSents = (e) => {
+    this.setState( {value: e.target.value} )
+    this.getLoremImpsum(e)
+  } // ./changeNumSents
 
   render() {
     return (
       <div className="App">
-        <div className='container-fluid'>
+        <div className='container'>
           <form>
 
+            {/* number of sentences */}
             <div className='form-group'>
               <label htmlFor='numSentences'>How many sentences do you need?</label>
-              <select className='form-control' id='numSentences'>
+              <select className='form-control' id='numSentences'
+                      value={this.state.value} onChange={this.changeNumSents} >
                 <option value='5'>5</option>
                 <option value='10'>10</option>
                 <option value='15'>15</option>
@@ -53,6 +57,7 @@ class App extends Component {
               </select>
             </div>
 
+            {/* lorem-impsum field */}
             <div className='form-group'>
               <div className='row'>
                 <div className='col-12'>
@@ -61,11 +66,6 @@ class App extends Component {
               </div>
             </div>
 
-            <div className='form-row text-center'>
-              <div className='col-12'>
-                <button className='btn btn-primary center'>Generate</button>
-              </div>
-            </div>
           </form>
         </div>
 
