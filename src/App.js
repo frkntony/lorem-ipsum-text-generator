@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import './App.css'
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 
 class App extends Component {
@@ -11,8 +12,17 @@ class App extends Component {
       apiURL: 'https://baconipsum.com/api/',
       type: 'meat-and-filler',
       value: 5,
-      text: ''
+      text: '',
+      copied: false
     }
+  }
+
+  componentWillMount = () => {
+    axios.get(`${this.state.apiURL}?type=${this.state.type}?sentences=${this.state.value}`)
+    .then(res => {
+      this.setState({ text: res.data })
+    })
+    .catch(e => console.log(e))
   }
 
   // returns random lorem impsum
@@ -29,9 +39,16 @@ class App extends Component {
   } // ./getLoremImpsum
 
   changeNumSents = (e) => {
-    this.setState( {value: e.target.value} )
+    this.setState({
+      value: e.target.value,
+      copied: false
+      })
     this.getLoremImpsum(e)
   } // ./changeNumSents
+
+  onCopy = () => {
+    this.setState({copied: true});
+  };
 
   render() {
     return (
@@ -63,6 +80,15 @@ class App extends Component {
                 <div className='col-12'>
                   {this.state.text}
                 </div>
+              </div>
+            </div>
+
+            {/* copy button */}
+            <div className='form-row text-center'>
+              <div className='col-12'>
+                <CopyToClipboard onCopy={this.onCopy} text={this.state.text}>
+                  <button className='btn center'>Copy</button>
+                </CopyToClipboard>
               </div>
             </div>
 
